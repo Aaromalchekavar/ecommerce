@@ -105,9 +105,12 @@ def update_user(req):
         last_name = req.POST['last_name']
         u = User.objects.get(username=username)
         if u is not None:
-            u.username = email
-            u.first_name = first_name
-            u.last_name = last_name
+            if email != '':
+                u.username = email
+            if first_name != '':
+                u.first_name = first_name
+            if last_name != '':
+                u.last_name = last_name
             u.save()
             return JsonResponse(
                 {'success': True},
