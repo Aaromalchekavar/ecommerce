@@ -35,19 +35,21 @@
                                 <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                                 <div class="form-outline form-white mb-4">
-                                    <input type="email" id="typeEmailX" class="form-control form-control-lg" />
+                                    <input type="email" id="typeEmailX" class="form-control form-control-lg email" />
                                     <label class="form-label" for="typeEmailX">Email</label>
                                 </div>
 
                                 <div class="form-outline form-white mb-4">
-                                    <input type="password" id="typePasswordX" class="form-control form-control-lg" />
+                                    <input type="password" id="typePasswordX"
+                                        class="form-control form-control-lg password" />
                                     <label class="form-label" for="typePasswordX">Password</label>
                                 </div>
 
                                 <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a>
                                 </p>
 
-                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                                <button class="btn btn-outline-light btn-lg px-5" id="bttnlogin"
+                                    type="submit">Login</button>
 
                                 <div class="d-flex justify-content-center text-center mt-4 pt-1">
                                     <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
@@ -69,5 +71,43 @@
         </div>
     </section>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $('#bttnlogin').click(() => {
+        console.log('clicked')
+        var email = $('.email').val()
+        var password = $('.password').val()
+        var data = {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'email': email,
+            'password': password
+        }
+
+        if (email == '' && password == '') {
+            alert.text("Email and pss field must not be empty")
+
+        } else if (email == '') {
+            alert("Email field must not be empty")
+        } else if (password == '') {
+            alert("Password field must not be empty")
+        } else {
+            $.ajax({
+                url: '/adminlogin',
+                method: 'POST',
+                data: data,
+                dataType: 'json',
+                success: (data) => {
+                    if (data.success) {
+                        window.location.replace('/adminpage')
+                    } else {
+                        alert("Invalid Credentials")
+                    }
+                }
+            })
+        }
+    })
+</script>
 
 </html>

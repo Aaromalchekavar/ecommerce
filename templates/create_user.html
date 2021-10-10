@@ -119,8 +119,7 @@
 	<div class="signup-form">
 		<form action="/examples/actions/confirmation.php" method="post">
 			{% csrf_token %}
-			<h2><i class="fa fa-user-plus" aria-hidden="true"></i> Sign Up</h2>
-			<p>Please fill in this form to create an account!</p>
+			<h2><i class="fa fa-user-plus" aria-hidden="true"></i>Create user</h2>
 			<hr>
 			<div class="form-group">
 				<div class="row">
@@ -148,14 +147,11 @@
 				<p class="conftest" style="font-weight: bold;color: red;"></p>
 			</div>
 			<div class="form-group">
-				<label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a
-						href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
 			</div>
 			<div class="form-group">
-				<button type="button" id="bttn" class="btn btn-primary btn-lg">Sign Up</button>
+				<button type="button" id="bttn" class="btn btn-primary btn-lg">create user</button>
 			</div>
 		</form>
-		<div class="hint-text">Already have an account? <a href="login">Login here</a></div>
 	</div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -201,13 +197,14 @@
 		}
 		else {
 			$.ajax({
-				url: '/register',
+				url: '/create_user',
 				method: 'POST',
 				data: data,
 				dataType: 'json',
 				success: (data) => {
 					if (data.success) {
-						window.location.replace('/login')
+						alert('user created')
+						window.location.replace('/adminpage')
 					}
 				}
 			})
