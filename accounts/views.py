@@ -159,7 +159,7 @@ def update_category(req):
 
 def display_category(req):
     category = Category.objects.all()
-    return render(req, 'display_category.html',{'categories':category})
+    return render(req, 'display_category.html', {'categories': category})
 
 
 def delete_category(req):
@@ -179,17 +179,66 @@ def delete_category(req):
 
 
 def add_product(req):
-    return render(req, 'add_product.html')
+    if req.method == 'POST':
+        image = req.POST['image']
+        name = req.POST['name']
+        category = req.POST['category']
+        price = req.POST['price']
+        description = req.POST['description']
+        prod = Product.objects.create(
+            image=image, name=name, price=price, description=description, category_id=category)
+        prod.save()
+        return JsonResponse(
+            {'success': True},
+            safe=False)
+    cat = Category.objects.all()
+    return render(req, 'add_product.html', {'categories': cat})
 
 
 def delete_product(req):
+    if req.method == 'POST':
+        name = req.POST['product']
+        p = Product.objects.get(name=name)
+        if p is not None:
+            p.delete()
+            return JsonResponse(
+                {'success': True},
+                safe=False)
+        else:
+            return JsonResponse(
+                {'success': True},
+                safe=False)
     return render(req, 'delete_product.html')
 
 
 def update_product(req):
-    return render(req, 'update_product.html')
+    if req.method == 'POST':
+        prodname = req.POST['prodname']
+        image = req.POST['image']
+        name = req.POST['name']
+        category = req.POST['category']
+        price = req.POST['price']
+        description = req.POST['description']
+        p = Product.objects.get(name=prodname)
+        if p is not None:
+            if image != '':
+                p.image = image
+            if name != '':
+                p.name = name
+            if category != '':
+                p.category_id = category
+            if price != '':
+                p.price = price
+            if description != '':
+                p.description = description
+            p.save()
+        return JsonResponse(
+            {'success': True},
+            safe=False)
+    cat = Category.objects.all()
+    return render(req, 'update_product.html', {'categories': cat})
 
 
 def display_product(req):
     product = Product.objects.all()
-    return render(req, 'display_product.html',{'products':product})
+    return render(req, 'display_product.html', {'products': product})
