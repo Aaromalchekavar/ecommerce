@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
+from .models import Product, Category
 
 # Create your views here.
 
@@ -125,3 +126,70 @@ def update_user(req):
 def display_user(req):
     users = User.objects.all()
     return render(req, 'display_user.html', {'users': users})
+
+
+def add_category(req):
+    if req.method == 'POST':
+        category = req.POST['category']
+        cat = Category.objects.create(name=category)
+        cat.save()
+        return JsonResponse(
+            {'success': True},
+            safe=False)
+    return render(req, 'add_category.html')
+
+
+def update_category(req):
+    if req.method == 'POST':
+        category = req.POST['category']
+        newcategory = req.POST['newcategory']
+        c = Category.objects.get(name=category)
+        if c is not None:
+            c.name = newcategory
+            c.save()
+            return JsonResponse(
+                {'success': True},
+                safe=False)
+        else:
+            return JsonResponse(
+                {'success': True},
+                safe=False)
+    return render(req, 'update_category.html')
+
+
+def display_category(req):
+    category = Category.objects.all()
+    return render(req, 'display_category.html',{'categories':category})
+
+
+def delete_category(req):
+    if req.method == 'POST':
+        category = req.POST['category']
+        c = Category.objects.get(name=category)
+        if c is not None:
+            c.delete()
+            return JsonResponse(
+                {'success': True},
+                safe=False)
+        else:
+            return JsonResponse(
+                {'success': True},
+                safe=False)
+    return render(req, 'delete_category.html')
+
+
+def add_product(req):
+    return render(req, 'add_product.html')
+
+
+def delete_product(req):
+    return render(req, 'delete_product.html')
+
+
+def update_product(req):
+    return render(req, 'update_product.html')
+
+
+def display_product(req):
+    product = Product.objects.all()
+    return render(req, 'display_product.html',{'products':product})
