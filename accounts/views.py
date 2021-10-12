@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from .models import Product, Category
 from .forms import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -16,6 +17,7 @@ def login(req):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(req, user)
+            req.session['username'] = username
             return JsonResponse(
                 {'success': True},
                 safe=False)
@@ -24,7 +26,6 @@ def login(req):
                 {'success': False},
                 safe=False)
     return render(req, 'login.html')
-
 
 def register(req):
     if req.method == 'POST':
@@ -40,7 +41,6 @@ def register(req):
             {'success': True},
             safe=False)
     return render(req, 'register.html')
-
 
 def adminlogin(req):
     if req.method == 'POST':
@@ -58,15 +58,16 @@ def adminlogin(req):
                 safe=False)
     return render(req, 'adminlogin.html')
 
-
+@login_required(login_url='/login')
 def logout(req):
+    auth.logout(req)
     return render(req, 'login.html')
 
-
+@login_required(login_url='/login')
 def admin(req):
     return render(req, 'admin.html')
 
-
+@login_required(login_url='/login')
 def create_user(req):
     if req.method == 'POST':
         email = req.POST['email']
@@ -82,7 +83,7 @@ def create_user(req):
             safe=False)
     return render(req, 'create_user.html')
 
-
+@login_required(login_url='/login')
 def delete_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -98,7 +99,7 @@ def delete_user(req):
                 safe=False)
     return render(req, 'delete_user.html')
 
-
+@login_required(login_url='/login')
 def update_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -123,12 +124,12 @@ def update_user(req):
                 safe=False)
     return render(req, 'update_user.html')
 
-
+@login_required(login_url='/login')
 def display_user(req):
     users = User.objects.all()
     return render(req, 'display_user.html', {'users': users})
 
-
+@login_required(login_url='/login')
 def add_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -139,7 +140,7 @@ def add_category(req):
             safe=False)
     return render(req, 'add_category.html')
 
-
+@login_required(login_url='/login')
 def update_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -157,12 +158,12 @@ def update_category(req):
                 safe=False)
     return render(req, 'update_category.html')
 
-
+@login_required(login_url='/login')
 def display_category(req):
     category = Category.objects.all()
     return render(req, 'display_category.html', {'categories': category})
 
-
+@login_required(login_url='/login')
 def delete_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -178,7 +179,7 @@ def delete_category(req):
                 safe=False)
     return render(req, 'delete_category.html')
 
-
+@login_required(login_url='/login')
 def add_product(req):
 
     if req.method == 'POST':
@@ -191,7 +192,7 @@ def add_product(req):
     form = ProductForm()
     return render(req, 'add_product.html', {'form' : form})
 
-
+@login_required(login_url='/login')
 def delete_product(req):
     if req.method == 'POST':
         name = req.POST['product']
@@ -207,7 +208,7 @@ def delete_product(req):
                 safe=False)
     return render(req, 'delete_product.html')
 
-
+@login_required(login_url='/login')
 def update_product(req):
     if req.method == 'POST':
         prodname = req.POST['prodname']
@@ -235,7 +236,7 @@ def update_product(req):
     cat = Category.objects.all()
     return render(req, 'update_product.html', {'categories': cat})
 
-
+@login_required(login_url='/login')
 def display_product(req):
     product = Product.objects.all()
     return render(req, 'display_product.html', {'products': product})
