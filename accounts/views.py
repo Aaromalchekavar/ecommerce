@@ -183,10 +183,11 @@ def add_product(req):
         image = req.POST['image']
         name = req.POST['name']
         category = req.POST['category']
+        quantity = req.POST['quantity']
         price = req.POST['price']
         description = req.POST['description']
         prod = Product.objects.create(
-            image=image, name=name, price=price, description=description, category_id=category)
+            image=image, name=name, price=price, description=description, category_id=category,quantity=quantity)
         prod.save()
         return JsonResponse(
             {'success': True},
@@ -216,6 +217,7 @@ def update_product(req):
         prodname = req.POST['prodname']
         image = req.POST['image']
         name = req.POST['name']
+        quantity = req.POST['quantity']
         category = req.POST['category']
         price = req.POST['price']
         description = req.POST['description']
@@ -225,6 +227,8 @@ def update_product(req):
                 p.image = image
             if name != '':
                 p.name = name
+            if name != '':
+                p.quantity = quantity
             if category != '':
                 p.category_id = category
             if price != '':

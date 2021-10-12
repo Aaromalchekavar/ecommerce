@@ -112,6 +112,7 @@
                 <label for="">Image</label>
                 <input type="file" name='text' class="image" />
                 <input type="text" class="form-control name" name="" placeholder="name" required="required">
+                <input type="number" class="form-control quantity" name="" placeholder="quantity" required="required">
                 <select name=”category” class="cat">
                     {%for category in categories%}
                     <option value={{category.id}}>{{category.name}}</option>
@@ -134,6 +135,7 @@
     $('#bttn').click(() => {
         var image = $('.image').val()
         var name = $('.name').val()
+        var quantity = $('.quantity').val()
         var cat = $('.cat').val()
         var price = $('.price').val()
         var desc = $('.desc').val()
@@ -141,6 +143,7 @@
             'csrfmiddlewaretoken': '{{csrf_token}}',
             'image': image,
             'name': name,
+            'quantity': quantity,
             'category': cat,
             'price': price,
             'description': desc
