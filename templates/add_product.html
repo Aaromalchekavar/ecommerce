@@ -107,65 +107,13 @@
                     <h3>update</h3>
                 </div>
             </div>
-            <form class="login-form" action="display_user" method="POST" enctype="multipart/form-data">
+            <form class="login-form" action="add_product" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <label for="">Image</label>
-                <input type="file" name='text' class="image" />
-                <input type="text" class="form-control name" name="" placeholder="name" required="required">
-                <input type="number" class="form-control quantity" name="" placeholder="quantity" required="required">
-                <select name=”category” class="cat">
-                    {%for category in categories%}
-                    <option value={{category.id}}>{{category.name}}</option>
-                    {%endfor%}
-                </select>
-                <input type="number" class="form-control price" name="price" placeholder="price" required="required">
-                <textarea type="text" class="form-control desc" name="email" placeholder="Desctiption"
-                    required="required"></textarea>
-
-                <input type="button" name="" id="bttn" value="add product">
+                {{ form.as_p }}
+                <input type="submit" name="" id="bttn" value="add product">
             </form>
         </div>
     </div>
 
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    $('#bttn').click(() => {
-        var image = $('.image')
-        var name = $('.name').val()
-        var quantity = $('.quantity').val()
-        var cat = $('.cat').val()
-        var price = $('.price').val()
-        var desc = $('.desc').val()
-        var data = {
-            'csrfmiddlewaretoken': '{{csrf_token}}',
-            'image': image,
-            'name': name,
-            'quantity': quantity,
-            'category': cat,
-            'price': price,
-            'description': desc
-        }
-        console.log(data)
-
-        $.ajax({
-            url: '/add_product',
-            method: 'POST',
-            data: data,
-            dataType: 'json',
-            success: (data) => {
-                if (data.success) {
-                    alert('product added')
-                    window.location.replace('/adminpage')
-                } else {
-                    alert('Unable to update')
-                }
-            }
-        })
-
-    })
-</script>
-
 </html>

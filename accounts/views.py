@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from .models import Product, Category
+from .forms import *
 
 # Create your views here.
 
@@ -179,21 +180,16 @@ def delete_category(req):
 
 
 def add_product(req):
+
     if req.method == 'POST':
-        image = req.POST['image']
-        name = req.POST['name']
-        category = req.POST['category']
-        quantity = req.POST['quantity']
-        price = req.POST['price']
-        description = req.POST['description']
-        prod = Product.objects.create(
-            image=image, name=name, price=price, description=description, category_id=category,quantity=quantity)
-        prod.save()
-        return JsonResponse(
-            {'success': True},
-            safe=False)
-    cat = Category.objects.all()
-    return render(req, 'add_product.html', {'categories': cat})
+        form = ProductForm(req.POST, req.FILES)
+  
+        if form.is_valid():
+            form.save()
+
+        return redirect('/adminpage')
+    form = ProductForm()
+    return render(req, 'add_product.html', {'form' : form})
 
 
 def delete_product(req):
@@ -215,7 +211,6 @@ def delete_product(req):
 def update_product(req):
     if req.method == 'POST':
         prodname = req.POST['prodname']
-        image = req.POST['image']
         name = req.POST['name']
         quantity = req.POST['quantity']
         category = req.POST['category']
@@ -223,8 +218,6 @@ def update_product(req):
         description = req.POST['description']
         p = Product.objects.get(name=prodname)
         if p is not None:
-            if image != '':
-                p.image = image
             if name != '':
                 p.name = name
             if name != '':

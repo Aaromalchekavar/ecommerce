@@ -110,8 +110,6 @@
             <form class="login-form" action="display_user" method="POST">
                 {% csrf_token %}
                 <input type="text" name="" class="updateprod" placeholder="Name of product to Update">
-                <label for="">Image</label>
-                <input type="file" name='text' class="image" />
                 <input type="text" class="form-control name" name="" placeholder="name" required="required">
                 <input type="number" class="form-control quantity" name="" placeholder="quantity" required="required">
                 <select name=”category” class="cat">
@@ -134,7 +132,6 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $('#bttn').click(() => {
-        var image = $('.image').val()
         var name = $('.name').val()
         var quantity = $('.quantity').val()
         var cat = $('.cat').val()
@@ -144,7 +141,6 @@
         var data = {
             'csrfmiddlewaretoken': '{{csrf_token}}',
             'prodname': prodname,
-            'image': image,
             'name': name,
             'quantity': quantity,
             'category': cat,
