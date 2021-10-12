@@ -107,7 +107,7 @@
                     <h3>update</h3>
                 </div>
             </div>
-            <form class="login-form" action="display_user" method="POST">
+            <form class="login-form" action="display_user" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <label for="">Image</label>
                 <input type="file" name='text' class="image" />
@@ -133,7 +133,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $('#bttn').click(() => {
-        var image = $('.image').val()
+        var image = $('.image')
         var name = $('.name').val()
         var quantity = $('.quantity').val()
         var cat = $('.cat').val()
