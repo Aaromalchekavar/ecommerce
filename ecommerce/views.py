@@ -8,6 +8,15 @@ from django.http import JsonResponse
 
 @login_required(login_url='/login')
 def home(req):
+    if req.method == 'POST':
+        id = req.POST['id']
+        quantity = req.POST['maxQuantity']
+        p = Product.objects.get(id=id)
+        p.quantity = quantity
+        p.save()
+        return JsonResponse(
+                {'success': True},
+                safe=False)
     product = Product.objects.all()
     return render(req, 'home.html', {'products': product})
 

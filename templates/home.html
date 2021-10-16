@@ -104,9 +104,11 @@
                     <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
                     <div class="card-block">
                         <h4 class="card-title">{{product.name}}</h4>
+                        <h4 class="warning"></h4>
                         <p class="card-text">{{product.price}}</p>
                         <a href="#" data-name="{{product.name}}" data-price="{{product.price}}"
-                            data-quantity="{{product.quantity}}"class="add-to-cart btn btn-primary">Add to cart</a>
+                            data-quantity="{{product.quantity}}" data-id="{{product.id}}"
+                            class="add-to-cart btn btn-primary">Add to cart</a>
                     </div>
 
                 </div>
@@ -131,7 +133,7 @@
                         <table class="show-cart table">
 
                         </table>
-                        <div>Total price: $<span class="total-cart"></span></div>
+                        <div data-quantity="{{product.quantity}}">Total price: $<span class="total-cart"></span></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -153,6 +155,10 @@
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     // ************************************************
@@ -292,7 +298,6 @@
         return obj;
     })();
 
-
     // *****************************************
     // Triggers / Events
     // ***************************************** 
@@ -302,9 +307,35 @@
         var name = $(this).data('name');
         var price = Number($(this).data('price'));
         var maxQuantity = Number($(this).data('quantity'));
-        if(maxQuantity!=0){
-        shoppingCart.addItemToCart(name, price, 1);
-        displayCart();
+        var id = Number($(this).data('id'));
+        if (maxQuantity > 0) {
+            shoppingCart.addItemToCart(name, price, 1);
+            displayCart();
+            maxQuantity--;
+        } else {
+            alert("Out of Stock")
+        }
+        var data = {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'maxQuantity': maxQuantity,
+            'id': id
+        }
+        if (true) {
+            $.ajax({
+                url: '/home',
+                method: 'POST',
+                data: data,
+                dataType: 'json',
+                success: (data) => {
+                    if (data.success) {
+                        window.location.replace('/home')
+                        console.log(maxQuantity)
+                        console.log(id)
+                    } else {
+                        alert('invalid operation')
+                    }
+                }
+            })
         }
     });
 
@@ -361,6 +392,7 @@
     $('.show-cart').on("change", ".item-count", function (event) {
         var name = $(this).data('name');
         var count = Number($(this).val());
+
         shoppingCart.setCountForItem(name, count);
         displayCart();
     });
