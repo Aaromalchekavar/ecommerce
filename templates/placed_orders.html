@@ -29,6 +29,7 @@
             <th>Email</th>
             <th>Amount</th>
             <th>Order Status</th>
+            <th>Ordered At</th>
             <th>Cart ID</th>
         </tr>
     </thead>
@@ -43,6 +44,7 @@
             <td>{{order.total}}</td>
             <td>{{order.order_status}}</td>
             <td>{{order.created_at}}</td>
+            <td>{{order.cart_id}}</td>
         </tr>
         {%endfor%}
     </tbody>
