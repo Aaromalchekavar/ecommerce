@@ -18,13 +18,19 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
     path('home',views.home),
     path('profile',views.profile),
-    path('edit_profile',views.edit_profile)
+    path('edit_profile',views.edit_profile),
+    path("add-to-cart-<int:pro_id>/", AddToCartView.as_view(), name="addtocart"),
+    path("my-cart/", MyCartView.as_view(), name="mycart"),
+    path("my-cart/managecart/<int:cp_id>/", ManageCartView.as_view(), name="managecart"),
+    path("my-cart/emptycart/", EmptyCartView.as_view(), name="emptycart"),
+    path("emptycart/", EmptyCartView.as_view(), name="emptycart"),
 ]
 urlpatterns = urlpatterns + \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

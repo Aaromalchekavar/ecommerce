@@ -86,9 +86,8 @@
     <nav class="navbar navbar-inverse bg-inverse fixed-top bg-faded">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart (<span
-                        class="total-count"></span>)</button><button class="clear-cart btn btn-danger">Clear
-                    Cart</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart"><a href="my-cart" style="text-decoration: none;color: aliceblue;">Cart(<span
+                        class="total-count"></span>)</a></button><button class="clear-cart btn btn-danger"><a href="emptycart" style="text-decoration: none;color: aliceblue;">Clear Cart</a></button>
             </div>
         </div>
     </nav>
@@ -106,7 +105,7 @@
                         <h4 class="card-title">{{product.name}}</h4>
                         <h4 class="warning"></h4>
                         <p class="card-text">{{product.price}}</p>
-                        <a href="#" data-name="{{product.name}}" data-price="{{product.price}}"
+                        <a href="add-to-cart-{{product.id}}" data-name="{{product.name}}" data-price="{{product.price}}"
                             data-quantity="{{product.quantity}}" data-id="{{product.id}}"
                             class="add-to-cart btn btn-primary">Add to cart</a>
                     </div>
@@ -119,7 +118,7 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <!-- <div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -141,7 +140,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
             integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -160,7 +159,7 @@
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
+<!-- <script>
     // ************************************************
     // Shopping Cart API
     // ************************************************
@@ -399,6 +398,6 @@
 
     displayCart();
 
-</script>
+</script> -->
 
 </html>
