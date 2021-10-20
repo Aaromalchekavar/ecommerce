@@ -201,11 +201,29 @@ class CheckoutView(CreateView):
             form.instance.discount = 0
             form.instance.total = cart_obj.total
             form.instance.order_status = "Order Received"
-            del self.request.session['cart_id']
+            total = cart_obj.total
             pm = form.cleaned_data.get("payment_method")
-            order = form.save()
+            if pm == "PayPal":
+                form.save()
+                return redirect("/paypalpay")
+            del self.request.session['cart_id']
+            form.save()
             return redirect("/home")
         else:
             return redirect("/home")
         return super().form_valid(form)
 
+
+def Paypalpay(req):
+    cart_id = req.session.get("cart_id")
+    if cart_id:
+        cart_obj = Cart.objects.get(id=cart_id)
+        total = cart_obj.total
+    else:
+        total = 0
+    print(total)
+    return render(req,"paypal.html",{"total":total})
+
+def success(req):
+    del req.session['cart_id']
+    return render(req,"success.html")

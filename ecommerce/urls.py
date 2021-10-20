@@ -33,6 +33,8 @@ urlpatterns = [
     path("emptycart/", EmptyCartView.as_view(), name="emptycart"),
 
     path("my-cart/checkout/", CheckoutView.as_view(), name="checkout"),
+    path("paypalpay/", views.Paypalpay),
+    path("paypalpay/success/", views.success),
 ]
 urlpatterns = urlpatterns + \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
