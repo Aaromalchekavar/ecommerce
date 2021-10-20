@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
+
+from ecommerce.models import Order
 from .models import Product, Category
 from .forms import *
 from django.contrib.auth.decorators import login_required
@@ -240,3 +242,8 @@ def update_product(req):
 def display_product(req):
     product = Product.objects.all()
     return render(req, 'display_product.html', {'products': product})
+
+@login_required(login_url='/login')
+def placed_orders(req):
+    order = Order.objects.all()
+    return render(req,"placed_orders.html",{"orders":order})

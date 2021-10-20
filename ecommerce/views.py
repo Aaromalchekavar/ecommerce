@@ -3,9 +3,11 @@ from accounts.models import Product
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from .models import *
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView
+from .forms import *
+from django.urls import reverse_lazy, reverse
 
 @login_required(login_url='/login')
 def home(req):
@@ -167,3 +169,43 @@ class EmptyCartView(View):
             cart.total = 0
             cart.save()
         return redirect("mycart")
+
+class CheckoutView(CreateView):
+    template_name = "checkout.html"
+    form_class = CheckoutForm
+    success_url = "/home"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            pass
+        else:
+            return redirect("/login/?next=/checkout/")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id", None)
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+        else:
+            cart_obj = None
+        context['cart'] = cart_obj
+        return context
+
+    def form_valid(self, form):
+        cart_id = self.request.session.get("cart_id")
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            form.instance.cart = cart_obj
+            form.instance.subtotal = cart_obj.total
+            form.instance.discount = 0
+            form.instance.total = cart_obj.total
+            form.instance.order_status = "Order Received"
+            del self.request.session['cart_id']
+            pm = form.cleaned_data.get("payment_method")
+            order = form.save()
+            return redirect("/home")
+        else:
+            return redirect("/home")
+        return super().form_valid(form)
+

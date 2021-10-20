@@ -31,6 +31,8 @@ urlpatterns = [
     path("my-cart/managecart/<int:cp_id>/", ManageCartView.as_view(), name="managecart"),
     path("my-cart/emptycart/", EmptyCartView.as_view(), name="emptycart"),
     path("emptycart/", EmptyCartView.as_view(), name="emptycart"),
+
+    path("my-cart/checkout/", CheckoutView.as_view(), name="checkout"),
 ]
 urlpatterns = urlpatterns + \
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
