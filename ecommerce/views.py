@@ -213,7 +213,7 @@ class CheckoutView(CreateView):
             return redirect("/home")
         return super().form_valid(form)
 
-
+@login_required(login_url='/login')
 def Paypalpay(req):
     cart_id = req.session.get("cart_id")
     if cart_id:
@@ -223,7 +223,7 @@ def Paypalpay(req):
         total = 0
     print(total)
     return render(req,"paypal.html",{"total":total})
-
+@login_required(login_url='/login')
 def success(req):
     del req.session['cart_id']
-    return render(req,"success.html")
+    return redirect("/home")

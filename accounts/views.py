@@ -20,6 +20,7 @@ def login(req):
         if user is not None:
             auth.login(req, user)
             req.session['username'] = username
+            req.session['password'] = password
             return JsonResponse(
                 {'success': True},
                 safe=False)
@@ -65,11 +66,11 @@ def logout(req):
     auth.logout(req)
     return render(req, 'login.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def admin(req):
     return render(req, 'admin.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def create_user(req):
     if req.method == 'POST':
         email = req.POST['email']
@@ -85,7 +86,7 @@ def create_user(req):
             safe=False)
     return render(req, 'create_user.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def delete_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -101,7 +102,7 @@ def delete_user(req):
                 safe=False)
     return render(req, 'delete_user.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def update_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -126,12 +127,12 @@ def update_user(req):
                 safe=False)
     return render(req, 'update_user.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def display_user(req):
     users = User.objects.all()
     return render(req, 'display_user.html', {'users': users})
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def add_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -142,7 +143,7 @@ def add_category(req):
             safe=False)
     return render(req, 'add_category.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def update_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -160,12 +161,12 @@ def update_category(req):
                 safe=False)
     return render(req, 'update_category.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def display_category(req):
     category = Category.objects.all()
     return render(req, 'display_category.html', {'categories': category})
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def delete_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -181,7 +182,7 @@ def delete_category(req):
                 safe=False)
     return render(req, 'delete_category.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def add_product(req):
 
     if req.method == 'POST':
@@ -194,7 +195,7 @@ def add_product(req):
     form = ProductForm()
     return render(req, 'add_product.html', {'form' : form})
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def delete_product(req):
     if req.method == 'POST':
         name = req.POST['product']
@@ -210,7 +211,7 @@ def delete_product(req):
                 safe=False)
     return render(req, 'delete_product.html')
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def update_product(req):
     if req.method == 'POST':
         prodname = req.POST['prodname']
@@ -238,12 +239,12 @@ def update_product(req):
     cat = Category.objects.all()
     return render(req, 'update_product.html', {'categories': cat})
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def display_product(req):
     product = Product.objects.all()
     return render(req, 'display_product.html', {'products': product})
 
-@login_required(login_url='/login')
+@login_required(login_url='/adminlogin')
 def placed_orders(req):
     order = Order.objects.all()
     return render(req,"placed_orders.html",{"orders":order})
