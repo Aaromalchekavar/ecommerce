@@ -8,11 +8,21 @@ from ecommerce.models import Order
 from .models import Product, Category
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
+from .decorators import *
 
 # Create your views here.
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(req):
+    if req.session.has_key('username'):
+        username = req.session['username']
+        if req.session.has_key('password'):
+            password = req.session['password']
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(req, user)
+                return redirect('/home')
     if req.method == 'POST':
         username = req.POST['email']
         password = req.POST['password']
@@ -45,6 +55,7 @@ def register(req):
             safe=False)
     return render(req, 'register.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def adminlogin(req):
     if req.method == 'POST':
         username = req.POST['email']
@@ -64,13 +75,15 @@ def adminlogin(req):
 @login_required(login_url='/login')
 def logout(req):
     auth.logout(req)
+    req.session.flush()
+    req.session.modified = True
     return render(req, 'login.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def admin(req):
     return render(req, 'admin.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def create_user(req):
     if req.method == 'POST':
         email = req.POST['email']
@@ -86,7 +99,7 @@ def create_user(req):
             safe=False)
     return render(req, 'create_user.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def delete_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -102,7 +115,7 @@ def delete_user(req):
                 safe=False)
     return render(req, 'delete_user.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def update_user(req):
     if req.method == 'POST':
         username = req.POST['username']
@@ -127,12 +140,12 @@ def update_user(req):
                 safe=False)
     return render(req, 'update_user.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def display_user(req):
     users = User.objects.all()
     return render(req, 'display_user.html', {'users': users})
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def add_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -143,7 +156,7 @@ def add_category(req):
             safe=False)
     return render(req, 'add_category.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def update_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -161,12 +174,12 @@ def update_category(req):
                 safe=False)
     return render(req, 'update_category.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def display_category(req):
     category = Category.objects.all()
     return render(req, 'display_category.html', {'categories': category})
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def delete_category(req):
     if req.method == 'POST':
         category = req.POST['category']
@@ -182,7 +195,7 @@ def delete_category(req):
                 safe=False)
     return render(req, 'delete_category.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def add_product(req):
 
     if req.method == 'POST':
@@ -195,7 +208,7 @@ def add_product(req):
     form = ProductForm()
     return render(req, 'add_product.html', {'form' : form})
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def delete_product(req):
     if req.method == 'POST':
         name = req.POST['product']
@@ -211,7 +224,7 @@ def delete_product(req):
                 safe=False)
     return render(req, 'delete_product.html')
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def update_product(req):
     if req.method == 'POST':
         prodname = req.POST['prodname']
@@ -239,12 +252,19 @@ def update_product(req):
     cat = Category.objects.all()
     return render(req, 'update_product.html', {'categories': cat})
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def display_product(req):
     product = Product.objects.all()
     return render(req, 'display_product.html', {'products': product})
 
-@login_required(login_url='/adminlogin')
+@superuser_required
 def placed_orders(req):
     order = Order.objects.all()
     return render(req,"placed_orders.html",{"orders":order})
+
+@superuser_required
+def adminlogout(req):
+    auth.logout(req)
+    req.session.flush()
+    req.session.modified = True
+    return render(req, 'adminlogin.html')
