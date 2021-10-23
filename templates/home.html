@@ -94,7 +94,7 @@
 
     <!-- Main -->
     <div class="container">
-        <div class="row">++
+        <div class="row">
             {%for product in products%}
 
             <div class="col">
@@ -104,6 +104,12 @@
                         <h4 class="card-title">{{product.name}}</h4>
                         <h4 class="warning"></h4>
                         <p class="card-text">{{product.price}}</p>
+                        
+                        
+                                                <button class="moredetails" data-id="{{product.id}}">More Details</button>
+
+
+
                         <a href="add-to-cart-{{product.id}}" data-name="{{product.name}}" data-price="{{product.price}}"
                             data-quantity="{{product.quantity}}" data-id="{{product.id}}"
                             class="add-to-cart btn btn-primary">Add to cart</a>
@@ -157,6 +163,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+        $('.moredetails').click(function (event) {
+        event.preventDefault();
+        var id = Number($(this).data('id'));
+
+        console.log(id)
+
+        var data = {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'id': id
+        }
+        $.ajax({
+                url: '/productdetails',
+                method: 'POST',
+                data: data,
+                dataType: 'json',
+                success: (data) => {
+                    if (data.success) {
+                        window.location.replace('/productdetails')
+                    }
+                }
+            })
+
+    });
+    </script>
 
 <!-- <script>
     // ************************************************

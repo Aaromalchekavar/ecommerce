@@ -231,3 +231,17 @@ def Paypalpay(req):
 def success(req):
     del req.session['cart_id']
     return redirect("/home")
+    
+@login_required(login_url='/login')
+def productdetails(req):
+    if req.method == 'POST':
+        id = req.POST['id']
+        req.session['p_id'] = id
+        return JsonResponse(
+                {'success': True},
+                safe=False)
+    if req.session.has_key('username'):
+        id = req.session['p_id']
+        product = Product.objects.get(id=id)
+        return render(req,"productdetails.html",{"product":product})
+    return render(req,"productdetails.html")

@@ -33,6 +33,9 @@ urlpatterns = [
     path("my-cart/managecart/<int:cp_id>/", ManageCartView.as_view(), name="managecart"),
     path("my-cart/emptycart/", EmptyCartView.as_view(), name="emptycart"),
     path("emptycart/", EmptyCartView.as_view(), name="emptycart"),
+    
+    path("productdetails",views.productdetails),
+
 
     path("my-cart/checkout/", CheckoutView.as_view(), name="checkout"),
     path("paypalpay/", views.Paypalpay),
