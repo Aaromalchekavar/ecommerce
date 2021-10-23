@@ -1,11 +1,12 @@
 from django.urls import path
 from . import views
+from ecommerce.views import homepage
 
 urlpatterns = [
     path('login', views.login),
     path('register', views.register),
     path('adminlogin', views.adminlogin),
-    path('', views.login),
+    path('', homepage),
     path('logout', views.logout),
     path('adminpage', views.admin),
     path('create_user', views.create_user),

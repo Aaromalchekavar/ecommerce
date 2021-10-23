@@ -9,6 +9,10 @@ from django.views.generic import View, TemplateView, CreateView, FormView, Detai
 from .forms import *
 from django.urls import reverse_lazy, reverse
 
+def homepage(req):
+    product = Product.objects.all()
+    return render(req,'front_page.html',{'products': product})
+
 @login_required(login_url='/login')
 def home(req):
     if req.method == 'POST':
