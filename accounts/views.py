@@ -14,6 +14,7 @@ from .decorators import *
 
 # Create your views here.
 
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(req):
     if req.session.has_key('username'):
@@ -41,6 +42,7 @@ def login(req):
                 safe=False)
     return render(req, 'login.html')
 
+
 def register(req):
     if req.method == 'POST':
         email = req.POST['email']
@@ -55,6 +57,7 @@ def register(req):
             {'success': True},
             safe=False)
     return render(req, 'register.html')
+
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def adminlogin(req):
@@ -73,6 +76,7 @@ def adminlogin(req):
                 safe=False)
     return render(req, 'adminlogin.html')
 
+
 @login_required(login_url='/login')
 def logout(req):
     auth.logout(req)
@@ -80,9 +84,11 @@ def logout(req):
     req.session.modified = True
     return render(req, 'login.html')
 
+
 @superuser_required
 def admin(req):
     return render(req, 'admin.html')
+
 
 @superuser_required
 def create_user(req):
@@ -100,6 +106,7 @@ def create_user(req):
             safe=False)
     return render(req, 'create_user.html')
 
+
 @superuser_required
 def delete_user(req):
     if req.method == 'POST':
@@ -115,6 +122,7 @@ def delete_user(req):
                 {'success': True},
                 safe=False)
     return render(req, 'delete_user.html')
+
 
 @superuser_required
 def update_user(req):
@@ -141,10 +149,12 @@ def update_user(req):
                 safe=False)
     return render(req, 'update_user.html')
 
+
 @superuser_required
 def display_user(req):
     users = User.objects.all()
     return render(req, 'display_user.html', {'users': users})
+
 
 @superuser_required
 def add_category(req):
@@ -156,6 +166,7 @@ def add_category(req):
             {'success': True},
             safe=False)
     return render(req, 'add_category.html')
+
 
 @superuser_required
 def update_category(req):
@@ -175,10 +186,12 @@ def update_category(req):
                 safe=False)
     return render(req, 'update_category.html')
 
+
 @superuser_required
 def display_category(req):
     category = Category.objects.all()
     return render(req, 'display_category.html', {'categories': category})
+
 
 @superuser_required
 def delete_category(req):
@@ -196,18 +209,20 @@ def delete_category(req):
                 safe=False)
     return render(req, 'delete_category.html')
 
+
 @superuser_required
 def add_product(req):
 
     if req.method == 'POST':
         form = ProductForm(req.POST, req.FILES)
-  
+
         if form.is_valid():
             form.save()
 
         return redirect('/adminpage')
     form = ProductForm()
-    return render(req, 'add_product.html', {'form' : form})
+    return render(req, 'add_product.html', {'form': form})
+
 
 @superuser_required
 def delete_product(req):
@@ -224,6 +239,7 @@ def delete_product(req):
                 {'success': True},
                 safe=False)
     return render(req, 'delete_product.html')
+
 
 @superuser_required
 def update_product(req):
@@ -253,17 +269,20 @@ def update_product(req):
     cat = Category.objects.all()
     return render(req, 'update_product.html', {'categories': cat})
 
+
 @superuser_required
 def display_product(req):
     product = Product.objects.all()
     return render(req, 'display_product.html', {'products': product})
+
 
 @superuser_required
 def placed_orders(req):
     order = Order.objects.all()
     orderedproduct = CartProduct.objects.all()
     product = Product.objects.all()
-    return render(req,"placed_orders.html",{"orders":order,"orderedproducts":orderedproduct,"products":product})
+    return render(req, "placed_orders.html", {"orders": order, "orderedproducts": orderedproduct, "products": product})
+
 
 @superuser_required
 def adminlogout(req):

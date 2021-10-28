@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'd42qvkjjafrlii',
         'USER': 'echhcuremvzshp',
         'PASSWORD': '84795b6ead27da816eff13651e08e4e2b3fb8633d3833973444b4d2f862b7bde',
-        'HOST':'ec2-3-220-90-40.compute-1.amazonaws.com'
+        'HOST': 'ec2-3-220-90-40.compute-1.amazonaws.com'
     }
 }
 
@@ -129,7 +129,7 @@ STATICFILES_DIRS = ['./static']
 STATIC_ROOT = './assets'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

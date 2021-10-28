@@ -2,16 +2,23 @@ from django.shortcuts import render, redirect
 from accounts.models import Product
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.contrib.auth.models import auth
 from django.http import JsonResponse, request
 from .models import *
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView
 from .forms import *
 from django.urls import reverse_lazy, reverse
 
+
 def homepage(req):
+    if req.session.has_key('username'):
+        username = req.session['username']
+        if req.session.has_key('password'):
+            password = req.session['password']
+            return redirect('/login')
     product = Product.objects.all()
-    return render(req,'front_page.html',{'products': product})
+    return render(req, 'front_page.html', {'products': product})
+
 
 @login_required(login_url='/login')
 def home(req):
@@ -22,8 +29,8 @@ def home(req):
         p.quantity = quantity
         p.save()
         return JsonResponse(
-                {'success': True},
-                safe=False)
+            {'success': True},
+            safe=False)
     product = Product.objects.all()
     return render(req, 'home.html', {'products': product})
 
@@ -79,6 +86,7 @@ def edit_profile(req):
                 safe=False)
     return render(req, 'edit_profile.html')
 
+
 class AddToCartView(TemplateView):
     template_name = "addtocart.html"
 
@@ -121,6 +129,7 @@ class AddToCartView(TemplateView):
 
         return context
 
+
 class MyCartView(TemplateView):
     template_name = "mycart.html"
 
@@ -133,6 +142,7 @@ class MyCartView(TemplateView):
             cart = None
         context['cart'] = cart
         return context
+
 
 class ManageCartView(View):
     def get(self, request, *args, **kwargs):
@@ -164,6 +174,7 @@ class ManageCartView(View):
             pass
         return redirect("mycart")
 
+
 class EmptyCartView(View):
     def get(self, request, *args, **kwargs):
         cart_id = request.session.get("cart_id", None)
@@ -173,6 +184,7 @@ class EmptyCartView(View):
             cart.total = 0
             cart.save()
         return redirect("mycart")
+
 
 class CheckoutView(CreateView):
     template_name = "checkout.html"
@@ -217,6 +229,7 @@ class CheckoutView(CreateView):
             return redirect("/home")
         return super().form_valid(form)
 
+
 @login_required(login_url='/login')
 def Paypalpay(req):
     cart_id = req.session.get("cart_id")
@@ -226,22 +239,25 @@ def Paypalpay(req):
     else:
         total = 0
     print(total)
-    return render(req,"paypal.html",{"total":total})
+    return render(req, "paypal.html", {"total": total})
+
+
 @login_required(login_url='/login')
 def success(req):
     del req.session['cart_id']
     return redirect("/home")
-    
+
+
 @login_required(login_url='/login')
 def productdetails(req):
     if req.method == 'POST':
         id = req.POST['id']
         req.session['p_id'] = id
         return JsonResponse(
-                {'success': True},
-                safe=False)
+            {'success': True},
+            safe=False)
     if req.session.has_key('username'):
         id = req.session['p_id']
         product = Product.objects.get(id=id)
-        return render(req,"productdetails.html",{"product":product})
-    return render(req,"productdetails.html")
+        return render(req, "productdetails.html", {"product": product})
+    return render(req, "productdetails.html")

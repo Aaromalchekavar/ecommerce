@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from accounts.models import *
 
+
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=50)
@@ -21,6 +22,7 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.full_name
+
 
 class Cart(models.Model):
     customer = models.ForeignKey(
