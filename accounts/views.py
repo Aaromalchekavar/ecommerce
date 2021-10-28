@@ -6,6 +6,7 @@ from django.contrib.auth.models import auth
 
 from ecommerce.models import Order
 from .models import Product, Category
+from ecommerce.models import CartProduct
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
@@ -260,7 +261,9 @@ def display_product(req):
 @superuser_required
 def placed_orders(req):
     order = Order.objects.all()
-    return render(req,"placed_orders.html",{"orders":order})
+    orderedproduct = CartProduct.objects.all()
+    product = Product.objects.all()
+    return render(req,"placed_orders.html",{"orders":order,"orderedproducts":orderedproduct,"products":product})
 
 @superuser_required
 def adminlogout(req):
