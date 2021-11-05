@@ -210,6 +210,8 @@ class CheckoutView(CreateView):
 
     def form_valid(self, form):
         cart_id = self.request.session.get("cart_id")
+        username = self.request.session.get("username")
+        print(username)
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
             form.instance.cart = cart_obj
@@ -217,6 +219,7 @@ class CheckoutView(CreateView):
             form.instance.discount = 0
             form.instance.total = cart_obj.total
             form.instance.order_status = "Order Received"
+            form.instance.u_id = username
             total = cart_obj.total
             pm = form.cleaned_data.get("payment_method")
             if pm == "PayPal":
@@ -261,3 +264,11 @@ def productdetails(req):
         product = Product.objects.get(id=id)
         return render(req, "productdetails.html", {"product": product})
     return render(req, "productdetails.html")
+
+def orders(req):
+    username = req.session['username']
+    print(username)
+    orders = Order.objects.all().filter(u_id=username)
+    if orders is not None:
+        return render(req,"order_history.html",{"orders":orders})
+    return redirect("/home")
