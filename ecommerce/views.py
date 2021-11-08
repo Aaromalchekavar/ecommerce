@@ -229,7 +229,6 @@ class CheckoutView(CreateView):
             self.request.session['payment_method'] = form.cleaned_data['payment_method']
             self.request.session['femail'] = form.cleaned_data['email']
             if pm == "PayPal":
-                form.save()
                 return redirect("/paypalpay")
             del self.request.session['cart_id']
             form.save()
